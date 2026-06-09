@@ -1,7 +1,13 @@
 #pragma once
-#ifndef PLAYER.H
+#include "raylib.h"
 class Player
 {
+private:
+	Vector3 position;
+public:
+	Player();
 	
+	void update(float dt);
+	void draw();
+	Vector3 getPosition() const;
 };
-#endif // !PLAYER.H

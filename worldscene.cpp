@@ -11,7 +11,7 @@ WorldScene::WorldScene()
 }
 void WorldScene::update(float dt)
 {
-
+    player.update(dt);
 }
 
 void WorldScene::draw()
@@ -19,6 +19,7 @@ void WorldScene::draw()
     BeginMode3D(camera);
 
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
+    player.draw();
 
     EndMode3D();
 }
