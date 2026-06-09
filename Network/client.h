@@ -6,6 +6,14 @@ class Client
 {
 private:
 	SOCKET clientSocket;
+
+	struct playerPacket
+	{
+		float x;
+		float y;
+		float z;
+	};
+
 public:
 	Client();
 

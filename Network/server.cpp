@@ -67,12 +67,16 @@ void Server::acceptClient()
 
 void Server::sendResponse()
 {
-	char buffer[1024] = {};
+	Packet packet;
 
-	int bytesread = recv(clientSocket, buffer, sizeof(buffer),0);
-
-	if (bytesread > 0)
+	while (true)
 	{
-		std::cout << "Recieved :" << buffer << std::endl;
+		int bytesread = recv(clientSocket, (char*)&packet, sizeof(packet), 0);
+
+		if (bytesread > 0)
+		{
+			std::cout << "Recieved :" << packet.x << " " << packet.y << " " << packet.z << std::endl;
+		}
 	}
+	
 }

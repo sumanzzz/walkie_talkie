@@ -47,7 +47,20 @@ bool Client::Connect(const char* ip, int port)
 }
 void Client::sendRequest()
 {
-    const char* msg = "Hello to server from client";
+    playerPacket packet;
+    packet.x = 2.0f;
+    packet.y = 3.0f;
+    packet.z = 2.5f;
+    while (true)
+    {
+        packet.x += 2.0f;
+        packet.y += 1.0f;
+        packet.z += 3.0f;
 
-    send(clientSocket, msg, strlen(msg) , 0);
+        send(clientSocket, (char*)&packet, sizeof(packet), 0);
+        Sleep(100);
+    }
+    
+
+   
 }
