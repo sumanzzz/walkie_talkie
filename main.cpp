@@ -10,10 +10,12 @@ int main(void)
 {
     WorldScene scene;
 
-    InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
+    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
 
-    SetTargetFPS(60);             
-   
+    SetTargetFPS(60);     
+
+    DisableCursor();
+
     while (!WindowShouldClose())    
     {
         float dt = GetFrameTime();

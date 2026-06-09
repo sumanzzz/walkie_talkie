@@ -7,7 +7,7 @@ private:
 public:
 	Player();
 	
-	void update(float dt);
+	void update(float dt , float cameraAngle);
 	void draw();
 	Vector3 getPosition() const;
 };

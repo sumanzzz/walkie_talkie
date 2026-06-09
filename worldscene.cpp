@@ -1,5 +1,6 @@
 #include "worldscene.h"
 #include "raylib.h"
+#include "raymath.h"
 
 WorldScene::WorldScene()
 {
@@ -8,24 +9,27 @@ WorldScene::WorldScene()
     camera.up = { 0.0f, 1.0f, 0.0f };
     camera.fovy = 65.0f;
     camera.projection = CAMERA_PERSPECTIVE;
+    cameraAngle = 0.0f;
 }
 void WorldScene::update(float dt)
 {
-    player.update(dt);
-
+    player.update(dt , cameraAngle);
+    cameraAngle += GetMouseDelta().x * 0.005f;
     Vector3 playerPos = player.getPosition();
+
+    float radius = 5.0f;
 
     camera.position =
     {
-        playerPos.x,
-        playerPos.y + 2.0f,
-        playerPos.z + 4.0f
+        playerPos.x + sinf(cameraAngle) * radius,
+        playerPos.y + 3.0f,
+        playerPos.z + cosf(cameraAngle) * radius
     };
 
     camera.target =
     {
         playerPos.x,
-        playerPos.y,
+        playerPos.y + 1.0f,
         playerPos.z
     };
 }
@@ -36,6 +40,8 @@ void WorldScene::draw()
 
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
     //DrawCube({ 5,1,5 }, 1, 1, 1, RED);
+    DrawGrid(50, 1.0f);
+
     player.draw();
 
     EndMode3D();

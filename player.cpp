@@ -6,14 +6,44 @@ Player::Player()
 	position = { 0 , 1 , 0 };
 }
 
-void Player::update(float dt)
+void Player::update(float dt , float cameraAngle)
 {
 	float speed = 5.0f;
-	
-	if (IsKeyPressed(KEY_W)) position.z -= speed * dt; std::cout << position.z << '\n';
-	if (IsKeyPressed(KEY_S)) position.z += speed * dt;
-	if (IsKeyPressed(KEY_A)) position.x -= speed * dt;
-	if (IsKeyPressed(KEY_D)) position.x += speed * dt;
+
+	Vector3 forward =
+	{
+		sinf(cameraAngle),
+		0.0f,
+		cosf(cameraAngle)
+	};
+
+	Vector3 right =
+	{
+		forward.z,
+		0.0f,
+		-forward.x
+	};
+
+	if (IsKeyPressed(KEY_W))
+	{
+		position.x -= forward.x * speed * dt;
+		position.z -= forward.z * speed * dt;
+	}
+	if (IsKeyPressed(KEY_S))
+	{
+		position.x += forward.x * speed * dt;
+		position.z += forward.z * speed * dt;
+	}
+	if (IsKeyPressed(KEY_A))
+	{
+		position.x -= right.x * speed * dt;
+		position.z -= right.z * speed * dt;
+	}
+	if (IsKeyPressed(KEY_D))
+	{
+		position.x += right.x * speed * dt;
+		position.z += right.z * speed * dt;
+	}
 }
 
 void Player::draw()

@@ -8,6 +8,7 @@ class WorldScene : public Scene
 private:
 	Camera camera;
 	Player player;
+	float cameraAngle;
 
 public:
 	WorldScene();
