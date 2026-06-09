@@ -13,3 +13,6 @@ ipch/
 x64/
 Debug/
 Release/
+out/
+build/
+.vs/
