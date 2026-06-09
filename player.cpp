@@ -1,4 +1,5 @@
 #include "player.h"
+#include <iostream>
 
 Player::Player()
 {
@@ -8,8 +9,8 @@ Player::Player()
 void Player::update(float dt)
 {
 	float speed = 5.0f;
-
-	if (IsKeyPressed(KEY_W)) position.z -= speed * dt;
+	
+	if (IsKeyPressed(KEY_W)) position.z -= speed * dt; std::cout << position.z << '\n';
 	if (IsKeyPressed(KEY_S)) position.z += speed * dt;
 	if (IsKeyPressed(KEY_A)) position.x -= speed * dt;
 	if (IsKeyPressed(KEY_D)) position.x += speed * dt;

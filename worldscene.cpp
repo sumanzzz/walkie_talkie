@@ -12,6 +12,22 @@ WorldScene::WorldScene()
 void WorldScene::update(float dt)
 {
     player.update(dt);
+
+    Vector3 playerPos = player.getPosition();
+
+    camera.position =
+    {
+        playerPos.x,
+        playerPos.y + 2.0f,
+        playerPos.z + 4.0f
+    };
+
+    camera.target =
+    {
+        playerPos.x,
+        playerPos.y,
+        playerPos.z
+    };
 }
 
 void WorldScene::draw()
@@ -19,6 +35,7 @@ void WorldScene::draw()
     BeginMode3D(camera);
 
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
+    DrawCube({ 5,1,5 }, 1, 1, 1, RED);
     player.draw();
 
     EndMode3D();
