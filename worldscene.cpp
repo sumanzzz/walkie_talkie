@@ -11,7 +11,7 @@ WorldScene::WorldScene()
     camera.projection = CAMERA_PERSPECTIVE;
     cameraAngle = 0.0f;
 
-    
+    hasRemotePlayer = false;
     remotePlayerPosition = { 5, 1 , 0 };
 }
 
