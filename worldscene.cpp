@@ -14,7 +14,7 @@ WorldScene::WorldScene()
 void WorldScene::update(float dt)
 {
     player.update(dt , cameraAngle);
-    cameraAngle += GetMouseDelta().x * 0.005f;
+    cameraAngle -= GetMouseDelta().x * 0.005f;
     Vector3 playerPos = player.getPosition();
 
     float radius = 5.0f;

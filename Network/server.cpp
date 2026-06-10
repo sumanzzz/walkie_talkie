@@ -4,6 +4,7 @@
 #include "server.h"
 #include "packet.h"
 #include <iostream>
+#include <thread>
 
 
 #pragma comment(lib , "Ws2_32.lib")
@@ -11,7 +12,7 @@
 Server::Server()
 {
 	listenSocket = INVALID_SOCKET;
-	clientSocket = INVALID_SOCKET;
+	
 }
 bool Server::start(int port)
 {
@@ -56,19 +57,28 @@ bool Server::start(int port)
 
 void Server::acceptClient()
 {
-	std::cout << "Waiting for client..." << std::endl;
-
-	clientSocket = accept(listenSocket, nullptr, nullptr);
-
-	if (clientSocket == INVALID_SOCKET)
+	while (true)
 	{
-		std::cout << "Accept Failed...." << std::endl;
-		return;
+		std::cout << "Waiting for client..." << std::endl;
+
+		SOCKET clientSocket = accept(listenSocket, nullptr, nullptr);
+
+		if (clientSocket == INVALID_SOCKET)
+		{
+			std::cout << "Accept Failed...." << std::endl;
+			return;
+		}
+		clients.push_back(clientSocket);
+		
+		std::cout << "Client connected !" << std::endl;
+		std::cout << "Client count : " << clients.size() << std::endl;
+
+		std::thread(&Server::handleClient, this, clientSocket).detach();
 	}
-	std::cout << "Client connected !" << std::endl;
+	
 }
 
-void Server::sendResponse()
+void Server::handleClient(SOCKET clientSocket)
 {
 	PlayerPacket packet;
 
@@ -78,7 +88,7 @@ void Server::sendResponse()
 
 		if (bytesread > 0)
 		{
-			std::cout << "Recieved :" << packet.x << " " << packet.y << " " << packet.z << std::endl;
+			std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
 		}
 	}
 	
