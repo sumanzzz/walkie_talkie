@@ -49,6 +49,8 @@ bool Client::Connect(const char* ip, int port)
         std::cout<<"Connection failed"<<std::endl;
         return false;
     }
+    u_long mode = 1;
+    ioctlsocket(impl->clientSocket, FIONBIO, &mode);
 
     std::cout << "Connected to the server...." << std::endl;
 
@@ -59,6 +61,13 @@ bool Client::sendRequest(const PlayerPacket& packet)
     int result = send(impl->clientSocket, (const char*)&packet, sizeof(packet) , 0);
     std::cout << "Sending: "<< packet.x << " "<< packet.y << " "<< packet.z << std::endl;   
     return result != SOCKET_ERROR;
+}
+
+bool Client::recievePacket(PlayerPacket& packet)
+{
+    int bytesread = recv(impl->clientSocket, (char*)&packet, sizeof(packet), 0);
+
+    return bytesread > 0;
 }
 
 Client::~Client()

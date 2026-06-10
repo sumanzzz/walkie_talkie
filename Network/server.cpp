@@ -89,6 +89,14 @@ void Server::handleClient(SOCKET clientSocket)
 		if (bytesread > 0)
 		{
 			std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
+
+			for (SOCKET other : clients)
+			{
+				if (other != INVALID_SOCKET && other != clientSocket)
+				{
+					send(other, (char*)&packet, sizeof(packet), 0);
+				}
+			}
 		}
 	}
 	

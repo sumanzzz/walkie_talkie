@@ -17,5 +17,7 @@ public:
 
 	bool sendRequest(const PlayerPacket& packet);
 
+	bool recievePacket(PlayerPacket& packet);
+
 	~Client();
 };
