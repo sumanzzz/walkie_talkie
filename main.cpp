@@ -28,10 +28,21 @@ int main(void)
 
     while (!WindowShouldClose())    
     {
+        
         float dt = GetFrameTime();
         scene.update(dt);
         
+        
+        Vector3 pos = scene.getPlayerPosition();
 
+        PlayerPacket packet;
+        packet.x = pos.x;
+        packet.y = pos.y;
+        packet.z = pos.z;
+
+        client.sendRequest(packet);
+        
+       
         BeginDrawing();
 
         ClearBackground(SKYBLUE);

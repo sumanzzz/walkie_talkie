@@ -7,12 +7,6 @@ private:
 	SOCKET listenSocket;
 	SOCKET clientSocket;
 	
-	struct Packet
-	{
-		float x;
-		float y;
-		float z;
-	};
 
 
 public:

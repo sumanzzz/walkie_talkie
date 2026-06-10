@@ -2,7 +2,7 @@
 #include <WS2tcpip.h> // winsock2 extension for TCP/IP
 
 #include "server.h"
-
+#include "packet.h"
 #include <iostream>
 
 
@@ -70,7 +70,7 @@ void Server::acceptClient()
 
 void Server::sendResponse()
 {
-	Packet packet;
+	PlayerPacket packet;
 
 	while (true)
 	{

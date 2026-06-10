@@ -33,6 +33,10 @@ void WorldScene::update(float dt)
         playerPos.z
     };
 }
+Vector3 WorldScene::getPlayerPosition()
+{
+    return player.getPosition();
+}
 
 void WorldScene::draw()
 {

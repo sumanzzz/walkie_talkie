@@ -15,4 +15,6 @@ public:
 	
 	void update(float dt) override;
 	void draw() override;
+
+	Vector3 getPlayerPosition();
 };

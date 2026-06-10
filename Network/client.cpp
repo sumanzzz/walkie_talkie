@@ -57,7 +57,7 @@ bool Client::Connect(const char* ip, int port)
 bool Client::sendRequest(const PlayerPacket& packet)
 {
     int result = send(impl->clientSocket, (const char*)&packet, sizeof(packet) , 0);
-
+    std::cout << "Sending: "<< packet.x << " "<< packet.y << " "<< packet.z << std::endl;   
     return result != SOCKET_ERROR;
 }
 
