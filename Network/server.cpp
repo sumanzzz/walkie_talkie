@@ -1,7 +1,10 @@
+#include <WinSock2.h>
+#include <WS2tcpip.h> // winsock2 extension for TCP/IP
+
 #include "server.h"
 
 #include <iostream>
-#include <WS2tcpip.h> // winsock2 extension for TCP/IP
+
 
 #pragma comment(lib , "Ws2_32.lib")
 

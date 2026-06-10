@@ -1,23 +1,21 @@
 #pragma once
 
-#include <WinSock2.h>
+//#include <WinSock2.h>
+#include "packet.h"
 
 class Client
 {
 private:
-	SOCKET clientSocket;
+	struct Impl;
+	Impl* impl;
 
-	struct playerPacket
-	{
-		float x;
-		float y;
-		float z;
-	};
 
 public:
 	Client();
 
 	bool Connect(const char* ip, int port);
 
-	void sendRequest();
+	bool sendRequest(const PlayerPacket& packet);
+
+	~Client();
 };

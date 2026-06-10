@@ -1,13 +1,19 @@
-#include "client.h"
-
-#include <iostream>
 #include <WinSock2.h>
 #include <ws2tcpip.h>
 
+#include "client.h"
+
+#include <iostream>
+
+struct Client::Impl
+{
+    SOCKET clientSocket;
+};
 
 Client::Client()
 {
-	clientSocket = INVALID_SOCKET;
+    impl = new Impl();
+    impl->clientSocket = INVALID_SOCKET;
 }
 
 bool Client::Connect(const char* ip, int port)
@@ -20,9 +26,12 @@ bool Client::Connect(const char* ip, int port)
         return false;
     }
 
-    clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    impl->clientSocket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 
-    if(clientSocket == INVALID_SOCKET)
+    
+
+   
+    if(impl->clientSocket == INVALID_SOCKET)
     {
         std::cout << "Socket creation failed.." << std::endl;
         return false;
@@ -35,7 +44,7 @@ bool Client::Connect(const char* ip, int port)
 
     serverAddr.sin_addr.s_addr = inet_addr(ip);
 
-    if (connect(clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
+    if (connect(impl->clientSocket, (sockaddr*)&serverAddr, sizeof(serverAddr)) == SOCKET_ERROR)
     {
         std::cout<<"Connection failed"<<std::endl;
         return false;
@@ -45,22 +54,14 @@ bool Client::Connect(const char* ip, int port)
 
     return true;
 }
-void Client::sendRequest()
+bool Client::sendRequest(const PlayerPacket& packet)
 {
-    playerPacket packet;
-    packet.x = 2.0f;
-    packet.y = 3.0f;
-    packet.z = 2.5f;
-    while (true)
-    {
-        packet.x += 2.0f;
-        packet.y += 1.0f;
-        packet.z += 3.0f;
+    int result = send(impl->clientSocket, (const char*)&packet, sizeof(packet) , 0);
 
-        send(clientSocket, (char*)&packet, sizeof(packet), 0);
-        Sleep(100);
-    }
-    
+    return result != SOCKET_ERROR;
+}
 
-   
+Client::~Client()
+{
+    delete impl;
 }
