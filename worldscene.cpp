@@ -11,8 +11,6 @@ WorldScene::WorldScene()
     camera.projection = CAMERA_PERSPECTIVE;
     cameraAngle = 0.0f;
 
-    hasRemotePlayer = false;
-    remotePlayerPosition = { 5, 1 , 0 };
 }
 
 void WorldScene::update(float dt)
@@ -42,20 +40,20 @@ Vector3 WorldScene::getPlayerPosition()
     return player.getPosition();
 }
 
-void WorldScene::setRemotePlayerPosition(Vector3 pos)
+void WorldScene::updateRemotePLayer(int id, Vector3 pos)
 {
-    remotePlayerPosition = pos;
-    hasRemotePlayer = true;
+    remotePlayers[id] = pos;
 }
+
 
 void WorldScene::draw()
 {
     BeginMode3D(camera);
 
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
-    if (hasRemotePlayer)
+    for (auto& player : remotePlayers)
     {
-        DrawCube(remotePlayerPosition, 1, 1, 1, RED);
+        DrawCube(player.second, 1.0f, 1.0f, 1.0f, RED);
     }
     
     DrawGrid(50, 1.0f);

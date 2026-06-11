@@ -35,11 +35,11 @@ int main(void)
         
         Vector3 pos = scene.getPlayerPosition();
 
-        PlayerPacket packet;
-        PlayerPacket remotePacket;
+        PlayerPacket packet{};
+        PlayerPacket remotePacket{};
         if (client.recievePacket(remotePacket))
         {
-            scene.setRemotePlayerPosition({ remotePacket.x,remotePacket.y , remotePacket.z });
+            scene.updateRemotePLayer(remotePacket.playerId , { remotePacket.x,remotePacket.y , remotePacket.z });
         }
         packet.x = pos.x;
         packet.y = pos.y;

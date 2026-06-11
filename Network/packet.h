@@ -2,6 +2,8 @@
 
 struct PlayerPacket
 {
+	int playerId;
+
 	float x;
 	float y;
 	float z;

@@ -12,6 +12,7 @@
 Server::Server()
 {
 	listenSocket = INVALID_SOCKET;
+	nextPlyerId = 1;
 	
 }
 bool Server::start(int port)
@@ -68,9 +69,13 @@ void Server::acceptClient()
 			std::cout << "Accept Failed...." << std::endl;
 			return;
 		}
+
 		clients.push_back(clientSocket);
-		
+		int assignedId = nextPlyerId++;
+		playerIds[clientSocket] = assignedId;
+
 		std::cout << "Client connected !" << std::endl;
+		std::cout << "Assigned Player ID : " << assignedId << std::endl;
 		std::cout << "Client count : " << clients.size() << std::endl;
 
 		std::thread(&Server::handleClient, this, clientSocket).detach();
@@ -88,7 +93,9 @@ void Server::handleClient(SOCKET clientSocket)
 
 		if (bytesread > 0)
 		{
-			std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
+			packet.playerId = playerIds[clientSocket];
+
+			//std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
 
 			for (SOCKET other : clients)
 			{

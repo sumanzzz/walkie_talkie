@@ -2,12 +2,15 @@
 #include <WinSock2.h>
 
 #include <vector>
+#include <unordered_map>
 
 class Server
 {
 private:
 	SOCKET listenSocket;
 	std::vector<SOCKET> clients;
+	std::unordered_map<SOCKET, int> playerIds;
+	int nextPlyerId;
 	
 
 public:
