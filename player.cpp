@@ -3,6 +3,8 @@
 
 Player::Player()
 {
+	
+	
 	position = { 0 , 1 , 0 };
 }
 
@@ -46,12 +48,8 @@ void Player::update(float dt , float cameraAngle)
 	}
 }
 
-void Player::draw()
-{
-	DrawCube(position, 1, 1, 1, BLUE);
-}
-
 Vector3 Player::getPosition() const
 {
 	return position;
 }
+

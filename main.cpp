@@ -13,12 +13,14 @@ const int screenHeight = 450;
    
 int main(void)
 {
+    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
+
     Client client;
     client.Connect("127.0.0.1", 8000);
 
     WorldScene scene;
 
-    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
+    
 
     SetTargetFPS(60);     
 

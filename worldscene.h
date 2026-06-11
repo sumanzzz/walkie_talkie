@@ -9,6 +9,7 @@ class WorldScene : public Scene
 private:
 	Camera camera;
 	Player player;
+	Model bunny;
 	float cameraAngle;
 	std::unordered_map<int, Vector3> remotePlayers;
 

@@ -4,6 +4,7 @@
 
 WorldScene::WorldScene()
 {
+    bunny = LoadModel("assets/bunny2.glb");
     camera.position = { 0.0f, 10.0f, 10.0f };
     camera.target = { 0.0f, 0.0f, 0.0f };
     camera.up = { 0.0f, 1.0f, 0.0f };
@@ -55,14 +56,20 @@ void WorldScene::draw()
     BeginMode3D(camera);
 
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
+    Vector3 playerPos = player.getPosition();
+    playerPos.y -= 0.6f;
+    DrawModel(bunny, playerPos, 1.0f, WHITE);
     for (auto& player : remotePlayers)
     {
-        DrawCube(player.second, 1.0f, 1.0f, 1.0f, RED);
+        //DrawCube(player.second, 1.0f, 1.0f, 1.0f, RED);
+        Vector3 remotePlayerPos = player.second;
+        remotePlayerPos.y -= 0.6f;
+        DrawModel(bunny, remotePlayerPos, 1.0f, PINK);
     }
     
     DrawGrid(50, 1.0f);
 
-    player.draw();
+    
 
     EndMode3D();
 }
