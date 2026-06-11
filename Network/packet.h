@@ -7,6 +7,6 @@ struct PlayerPacket
 	float x;
 	float y;
 	float z;
-
+	float rotation;
 	bool disconnected;
 };

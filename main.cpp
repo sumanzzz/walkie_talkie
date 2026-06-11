@@ -49,7 +49,7 @@ int main(void)
             }
             else
             {
-                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z });
+                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation);
             }
            
         }
@@ -59,7 +59,7 @@ int main(void)
         packet.x = pos.x;
         packet.y = pos.y;
         packet.z = pos.z;
-
+        packet.rotation = scene.getPlayerRotation();
         client.sendRequest(packet);
         
        

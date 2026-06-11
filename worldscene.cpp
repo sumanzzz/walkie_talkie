@@ -41,10 +41,14 @@ Vector3 WorldScene::getPlayerPosition()
 {
     return player.getPosition();
 }
-
-void WorldScene::updateRemotePLayer(int id, Vector3 pos)
+float WorldScene::getPlayerRotation()
 {
-    remotePlayers[id] = pos;
+    return player.getrotation();
+}
+void WorldScene::updateRemotePLayer(int id, Vector3 pos , float rot)
+{
+    remotePlayers[id].position = pos;
+    remotePlayers[id].rotation = rot;
 }
 void WorldScene::removeRemotePlayer(int id)
 {
@@ -64,9 +68,9 @@ void WorldScene::draw()
     for (auto& player : remotePlayers)
     {
         //DrawCube(player.second, 1.0f, 1.0f, 1.0f, RED);
-        Vector3 remotePlayerPos = player.second;
+        Vector3 remotePlayerPos = player.second.position;
         remotePlayerPos.y -= 0.6f;
-        DrawModel(bunny, remotePlayerPos, 1.0f, PINK);
+        DrawModelEx(bunny, remotePlayerPos, {0,1,0},player.second.rotation * RAD2DEG + 90.0f,{1,1,1}, PINK);
     }
     
     DrawGrid(50, 1.0f);

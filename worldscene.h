@@ -11,7 +11,14 @@ private:
 	Player player;
 	Model bunny;
 	float cameraAngle;
-	std::unordered_map<int, Vector3> remotePlayers;
+
+	struct RemotePlayer
+	{
+		Vector3 position;
+		float rotation;
+	};
+
+	std::unordered_map<int, RemotePlayer> remotePlayers;
 
 	//bool hasRemotePlayer;
 	
@@ -21,7 +28,8 @@ public:
 	
 	void update(float dt) override;
 	void draw() override;
-	void updateRemotePLayer(int id, Vector3 pos);
+	float getPlayerRotation();
+	void updateRemotePLayer(int id, Vector3 pos , float rot);
 	void removeRemotePlayer(int id);
 	Vector3 getPlayerPosition();
 };
