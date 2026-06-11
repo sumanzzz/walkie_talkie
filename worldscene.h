@@ -21,6 +21,6 @@ public:
 	void update(float dt) override;
 	void draw() override;
 	void updateRemotePLayer(int id, Vector3 pos);
-	
+	void removeRemotePlayer(int id);
 	Vector3 getPlayerPosition();
 };

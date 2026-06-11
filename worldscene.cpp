@@ -44,6 +44,10 @@ void WorldScene::updateRemotePLayer(int id, Vector3 pos)
 {
     remotePlayers[id] = pos;
 }
+void WorldScene::removeRemotePlayer(int id)
+{
+    remotePlayers.erase(id);
+}
 
 
 void WorldScene::draw()

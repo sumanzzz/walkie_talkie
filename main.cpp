@@ -37,10 +37,23 @@ int main(void)
 
         PlayerPacket packet{};
         PlayerPacket remotePacket{};
+       
+
         if (client.recievePacket(remotePacket))
         {
-            scene.updateRemotePLayer(remotePacket.playerId , { remotePacket.x,remotePacket.y , remotePacket.z });
+            if (remotePacket.disconnected)
+            {
+                scene.removeRemotePlayer(remotePacket.playerId);
+            }
+            else
+            {
+                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z });
+            }
+           
         }
+        packet.disconnected = false;
+
+        
         packet.x = pos.x;
         packet.y = pos.y;
         packet.z = pos.z;

@@ -5,6 +5,7 @@
 #include "packet.h"
 #include <iostream>
 #include <thread>
+#include <algorithm>
 
 
 #pragma comment(lib , "Ws2_32.lib")
@@ -90,7 +91,24 @@ void Server::handleClient(SOCKET clientSocket)
 	while (true)
 	{
 		int bytesread = recv(clientSocket, (char*)&packet, sizeof(packet), 0);
+		if (bytesread == -1)
+		{
+			std::cout << "Client disconnected.." << std::endl;
+			PlayerPacket disconnectedPacket{};
 
+			disconnectedPacket.disconnected = true;
+
+			disconnectedPacket.playerId = playerIds[clientSocket];
+
+			for (SOCKET other : clients)
+			{
+				if (other != clientSocket)
+				{
+					send(other, (char*)&disconnectedPacket, sizeof(disconnectedPacket), 0);
+				}
+			}
+			break;
+		}
 		if (bytesread > 0)
 		{
 			packet.playerId = playerIds[clientSocket];
@@ -106,5 +124,8 @@ void Server::handleClient(SOCKET clientSocket)
 			}
 		}
 	}
+	closesocket(clientSocket);
+	clients.erase(std::remove(clients.begin(), clients.end(), clientSocket), clients.end());
+	playerIds.erase(clientSocket);
 	
 }

@@ -7,4 +7,6 @@ struct PlayerPacket
 	float x;
 	float y;
 	float z;
+
+	bool disconnected;
 };
