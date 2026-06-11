@@ -6,6 +6,7 @@ Player::Player()
 	
 	
 	position = { 0 , 1 , 0 };
+	rotation = 0.0f;
 }
 
 void Player::update(float dt , float cameraAngle)
@@ -53,3 +54,11 @@ Vector3 Player::getPosition() const
 	return position;
 }
 
+float Player::getrotation() const
+{
+	return rotation;
+}
+void Player::setRotation(float rot)
+{
+	rotation = rot;
+}

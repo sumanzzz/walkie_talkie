@@ -18,6 +18,7 @@ void WorldScene::update(float dt)
 {
     player.update(dt , cameraAngle);
     cameraAngle -= GetMouseDelta().x * 0.005f;
+    player.setRotation(cameraAngle);
     Vector3 playerPos = player.getPosition();
 
     float radius = 5.0f;
@@ -58,7 +59,8 @@ void WorldScene::draw()
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
     Vector3 playerPos = player.getPosition();
     playerPos.y -= 0.6f;
-    DrawModel(bunny, playerPos, 1.0f, WHITE);
+    
+    DrawModelEx(bunny, playerPos, { 0 , 1, 0 }, player.getrotation() * RAD2DEG+ 90.f, { 1,1,1 }, WHITE);
     for (auto& player : remotePlayers)
     {
         //DrawCube(player.second, 1.0f, 1.0f, 1.0f, RED);
