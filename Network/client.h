@@ -16,8 +16,9 @@ public:
 	bool Connect(const char* ip, int port);
 
 	bool sendRequest(const PlayerPacket& packet);
-
+	
 	bool recievePacket(PlayerPacket& packet);
+
 
 	~Client();
 };

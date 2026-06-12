@@ -43,7 +43,7 @@ int main(void)
 
         PlayerPacket packet{};
         PlayerPacket remotePacket{};
-       
+        
         strcpy(packet.username, username.c_str());
         if (client.recievePacket(remotePacket))
         {
@@ -64,8 +64,18 @@ int main(void)
         packet.y = pos.y;
         packet.z = pos.z;
         packet.rotation = scene.getPlayerRotation();
+        packet.isChat = false;
         client.sendRequest(packet);
         
+        if (IsKeyPressed(KEY_ENTER))
+        {
+            PlayerPacket chatPacket{};
+            chatPacket.isChat = true;
+
+            strcpy_s(chatPacket.message, "Hello");
+
+            client.sendRequest(chatPacket);
+        }
        
         BeginDrawing();
 
