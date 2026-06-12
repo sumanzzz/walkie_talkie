@@ -20,7 +20,7 @@ private:
 
 	std::unordered_map<int, RemotePlayer> remotePlayers;
 
-	//bool hasRemotePlayer;
+	
 	
 
 public:
