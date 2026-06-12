@@ -4,7 +4,7 @@
 
 WorldScene::WorldScene()
 {
-    bunny = LoadModel("assets/bunny2.glb");
+    bunny = LoadModel("assets/bunny3.glb");
     camera.position = { 0.0f, 10.0f, 10.0f };
     camera.target = { 0.0f, 0.0f, 0.0f };
     camera.up = { 0.0f, 1.0f, 0.0f };
@@ -45,10 +45,11 @@ float WorldScene::getPlayerRotation()
 {
     return player.getrotation();
 }
-void WorldScene::updateRemotePLayer(int id, Vector3 pos , float rot)
+void WorldScene::updateRemotePLayer(int id, Vector3 pos , float rot ,std::string username)
 {
     remotePlayers[id].position = pos;
     remotePlayers[id].rotation = rot;
+    remotePlayers[id].username = username;
 }
 void WorldScene::removeRemotePlayer(int id)
 {
@@ -63,14 +64,18 @@ void WorldScene::draw()
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
     Vector3 playerPos = player.getPosition();
     playerPos.y -= 0.6f;
-    
     DrawModelEx(bunny, playerPos, { 0 , 1, 0 }, player.getrotation() * RAD2DEG+ 90.f, { 1,1,1 }, WHITE);
+
+    
     for (auto& player : remotePlayers)
     {
         //DrawCube(player.second, 1.0f, 1.0f, 1.0f, RED);
         Vector3 remotePlayerPos = player.second.position;
         remotePlayerPos.y -= 0.6f;
         DrawModelEx(bunny, remotePlayerPos, {0,1,0},player.second.rotation * RAD2DEG + 90.0f,{1,1,1}, PINK);
+
+        
+        
     }
     
     DrawGrid(50, 1.0f);
@@ -78,5 +83,13 @@ void WorldScene::draw()
     
 
     EndMode3D();
+    for (auto& player : remotePlayers)
+    {
+        Vector3 textPos = player.second.position;
+        textPos.y += 2.0f;
+
+        Vector2 screenPos = GetWorldToScreen(textPos, camera);
+        DrawText(player.second.username.c_str(), (int)screenPos.x, (int)screenPos.y, 20, ORANGE);
+    }
 }
 

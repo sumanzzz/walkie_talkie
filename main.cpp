@@ -2,6 +2,7 @@
 
 
 #include <iostream>
+#include <string>
 #include "raylib.h"
 #include "worldscene.h"
 #include "Network/client.h"
@@ -14,6 +15,9 @@ const int screenHeight = 450;
 int main(void)
 {
     InitWindow(screenWidth, screenHeight, "Walkie Talkie");
+
+    std::string username;
+    std::getline(std::cin, username);
 
     Client client;
     client.Connect("127.0.0.1", 8000);
@@ -40,7 +44,7 @@ int main(void)
         PlayerPacket packet{};
         PlayerPacket remotePacket{};
        
-
+        strcpy(packet.username, username.c_str());
         if (client.recievePacket(remotePacket))
         {
             if (remotePacket.disconnected)
@@ -49,7 +53,7 @@ int main(void)
             }
             else
             {
-                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation);
+                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation , remotePacket.username);
             }
            
         }

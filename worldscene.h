@@ -3,6 +3,7 @@
 #include "raylib.h"
 #include "player.h"
 #include <unordered_map>
+#include <string>
 
 class WorldScene : public Scene
 {
@@ -16,6 +17,7 @@ private:
 	{
 		Vector3 position;
 		float rotation;
+		std::string username;
 	};
 
 	std::unordered_map<int, RemotePlayer> remotePlayers;
@@ -29,7 +31,7 @@ public:
 	void update(float dt) override;
 	void draw() override;
 	float getPlayerRotation();
-	void updateRemotePLayer(int id, Vector3 pos , float rot);
+	void updateRemotePLayer(int id, Vector3 pos , float rot , std::string username);
 	void removeRemotePlayer(int id);
 	Vector3 getPlayerPosition();
 };
