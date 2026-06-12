@@ -106,7 +106,7 @@ int main(void)
                 chatPacket.isChat = true;
 
                 strcpy_s(chatPacket.message, currentInput.c_str());
-                currentInput = "";
+                currentInput.clear();
                 isTyping = false;
                 client.sendRequest(chatPacket);
             }

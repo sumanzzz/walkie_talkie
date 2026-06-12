@@ -122,7 +122,15 @@ void WorldScene::draw()
             textPos.y += 2.0f;
 
             Vector2 screenPos = GetWorldToScreen(textPos, camera);
-            DrawText(player.second.currentMessage.c_str(), (int)screenPos.x, (int)screenPos.y, 20, DARKBLUE);
+            //DrawText(player.second.currentMessage.c_str(), (int)screenPos.x, (int)screenPos.y, 20, DARKBLUE);
+
+            int bubbleX = (int)screenPos.x + 40;
+            int bubbleY = (int)screenPos.y + 40;
+
+            DrawRectangleRounded({ (float)bubbleX , (float)bubbleY ,120.0f , 35.0f }, 0.3f, 8, WHITE);
+            DrawRectangleRoundedLines({ (float)bubbleX , (float)bubbleY ,120.0f , 35.0f }, 0.3f, 8, BLACK);
+            DrawText(player.second.currentMessage.c_str(), bubbleX + 10, bubbleY + 8, 18, DARKBLUE);
+
         }
         
     }
