@@ -12,6 +12,8 @@ private:
 	Player player;
 	Model bunny;
 	float cameraAngle;
+	std::string currentInput;
+	bool isTyping = false;
 
 	struct RemotePlayer
 	{
@@ -38,4 +40,7 @@ public:
 	void updateRemotePlayerChat(int id, std::string message);
 	void removeRemotePlayer(int id);
 	Vector3 getPlayerPosition();
+
+	void setCurrentInput(const std::string& input);
+	void setIsTyping(bool state);
 };

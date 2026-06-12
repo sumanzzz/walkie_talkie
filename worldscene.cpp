@@ -16,7 +16,11 @@ WorldScene::WorldScene()
 
 void WorldScene::update(float dt)
 {
-    player.update(dt , cameraAngle);
+    if (!isTyping)
+    {
+        player.update(dt, cameraAngle);
+    }
+    
     cameraAngle -= GetMouseDelta().x * 0.005f;
     player.setRotation(cameraAngle);
     Vector3 playerPos = player.getPosition();
@@ -68,7 +72,14 @@ void WorldScene::removeRemotePlayer(int id)
 {
     remotePlayers.erase(id);
 }
-
+void WorldScene::setCurrentInput(const std::string& input)
+{
+    currentInput = input;
+}
+void WorldScene::setIsTyping(bool state)
+{
+    isTyping = state;
+}
 
 void WorldScene::draw()
 {
@@ -114,6 +125,11 @@ void WorldScene::draw()
             DrawText(player.second.currentMessage.c_str(), (int)screenPos.x, (int)screenPos.y, 20, DARKBLUE);
         }
         
+    }
+    if (isTyping)
+    {
+        DrawRectangle(20, GetScreenHeight() - 50, 400, 30, LIGHTGRAY);
+        DrawText(currentInput.c_str(), 25, GetScreenHeight() - 45, 20, BLACK);
     }
 }
 

@@ -30,6 +30,8 @@ int main(void)
 
     DisableCursor();
 
+    std::string currentInput;
+    bool isTyping = false;
     
 
     while (!WindowShouldClose())    
@@ -58,6 +60,7 @@ int main(void)
             }
             else
             {
+         
                 scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation , remotePacket.username);
             }
            
@@ -72,15 +75,43 @@ int main(void)
         packet.isChat = false;
         client.sendRequest(packet);
         
-        if (IsKeyPressed(KEY_ENTER))
+       
+        scene.setCurrentInput(currentInput);
+        scene.setIsTyping(isTyping);
+
+        if (!isTyping)
         {
-            PlayerPacket chatPacket{};
-            chatPacket.isChat = true;
-
-            strcpy_s(chatPacket.message, "Hello");
-
-            client.sendRequest(chatPacket);
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                isTyping = true;
+            }
         }
+        else
+        {
+            int key = GetCharPressed();
+
+            while (key > 0)
+            {
+                currentInput += (char)key;
+                key = GetCharPressed();
+            }
+
+            if (isTyping && IsKeyPressed(KEY_BACKSPACE) && !currentInput.empty())
+            {
+                currentInput.pop_back();
+            }
+            if (isTyping && IsKeyPressed(KEY_ENTER))
+            {
+                PlayerPacket chatPacket{};
+                chatPacket.isChat = true;
+
+                strcpy_s(chatPacket.message, currentInput.c_str());
+                currentInput = "";
+                isTyping = false;
+                client.sendRequest(chatPacket);
+            }
+        }
+
        
         BeginDrawing();
 
