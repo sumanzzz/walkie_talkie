@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <unordered_map>
+#include <string>
 
 class Server
 {
@@ -10,6 +11,7 @@ private:
 	SOCKET listenSocket;
 	std::vector<SOCKET> clients;
 	std::unordered_map<SOCKET, int> playerIds;
+	std::unordered_map<int, std::string> usernames;
 	int nextPlyerId;
 	
 

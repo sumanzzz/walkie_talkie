@@ -74,7 +74,7 @@ void Server::acceptClient()
 		clients.push_back(clientSocket);
 		int assignedId = nextPlyerId++;
 		playerIds[clientSocket] = assignedId;
-
+	
 		std::cout << "Client connected !" << std::endl;
 		std::cout << "Assigned Player ID : " << assignedId << std::endl;
 		std::cout << "Client count : " << clients.size() << std::endl;
@@ -93,7 +93,7 @@ void Server::handleClient(SOCKET clientSocket)
 		int bytesread = recv(clientSocket, (char*)&packet, sizeof(packet), 0);
 		if (bytesread == -1)
 		{
-			std::cout << "Client disconnected.." << std::endl;
+			std::cout <<usernames[packet.playerId] <<" " << " disconnected.." << std::endl;
 			PlayerPacket disconnectedPacket{};
 
 			disconnectedPacket.disconnected = true;
@@ -112,7 +112,12 @@ void Server::handleClient(SOCKET clientSocket)
 		if (bytesread > 0)
 		{
 			packet.playerId = playerIds[clientSocket];
+			if (usernames.find(packet.playerId) == usernames.end())
+			{
+				usernames[packet.playerId] = packet.username;
 
+				std::cout << "Player : " <<packet.playerId << " joined as " <<" "<< usernames[packet.playerId] << std::endl;
+			}
 			//std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
 
 			for (SOCKET other : clients)
