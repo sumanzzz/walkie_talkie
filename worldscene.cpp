@@ -4,6 +4,7 @@
 
 WorldScene::WorldScene()
 {
+    bunny = LoadModel("assets/bunny2.glb");
     camera.position = { 0.0f, 10.0f, 10.0f };
     camera.target = { 0.0f, 0.0f, 0.0f };
     camera.up = { 0.0f, 1.0f, 0.0f };
@@ -11,14 +12,13 @@ WorldScene::WorldScene()
     camera.projection = CAMERA_PERSPECTIVE;
     cameraAngle = 0.0f;
 
-    hasRemotePlayer = false;
-    remotePlayerPosition = { 5, 1 , 0 };
 }
 
 void WorldScene::update(float dt)
 {
     player.update(dt , cameraAngle);
     cameraAngle -= GetMouseDelta().x * 0.005f;
+    player.setRotation(cameraAngle);
     Vector3 playerPos = player.getPosition();
 
     float radius = 5.0f;
@@ -41,26 +41,41 @@ Vector3 WorldScene::getPlayerPosition()
 {
     return player.getPosition();
 }
-
-void WorldScene::setRemotePlayerPosition(Vector3 pos)
+float WorldScene::getPlayerRotation()
 {
-    remotePlayerPosition = pos;
-    hasRemotePlayer = true;
+    return player.getrotation();
 }
+void WorldScene::updateRemotePLayer(int id, Vector3 pos , float rot)
+{
+    remotePlayers[id].position = pos;
+    remotePlayers[id].rotation = rot;
+}
+void WorldScene::removeRemotePlayer(int id)
+{
+    remotePlayers.erase(id);
+}
+
 
 void WorldScene::draw()
 {
     BeginMode3D(camera);
 
     DrawPlane({ 0,0,0 }, { 50,50 }, WHITE);
-    if (hasRemotePlayer)
+    Vector3 playerPos = player.getPosition();
+    playerPos.y -= 0.6f;
+    
+    DrawModelEx(bunny, playerPos, { 0 , 1, 0 }, player.getrotation() * RAD2DEG+ 90.f, { 1,1,1 }, WHITE);
+    for (auto& player : remotePlayers)
     {
-        DrawCube(remotePlayerPosition, 1, 1, 1, RED);
+        //DrawCube(player.second, 1.0f, 1.0f, 1.0f, RED);
+        Vector3 remotePlayerPos = player.second.position;
+        remotePlayerPos.y -= 0.6f;
+        DrawModelEx(bunny, remotePlayerPos, {0,1,0},player.second.rotation * RAD2DEG + 90.0f,{1,1,1}, PINK);
     }
     
     DrawGrid(50, 1.0f);
 
-    player.draw();
+    
 
     EndMode3D();
 }

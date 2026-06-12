@@ -2,15 +2,25 @@
 #include "scene.h"
 #include "raylib.h"
 #include "player.h"
+#include <unordered_map>
 
 class WorldScene : public Scene
 {
 private:
 	Camera camera;
 	Player player;
+	Model bunny;
 	float cameraAngle;
-	Vector3 remotePlayerPosition;
-	bool hasRemotePlayer;
+
+	struct RemotePlayer
+	{
+		Vector3 position;
+		float rotation;
+	};
+
+	std::unordered_map<int, RemotePlayer> remotePlayers;
+
+	//bool hasRemotePlayer;
 	
 
 public:
@@ -18,7 +28,8 @@ public:
 	
 	void update(float dt) override;
 	void draw() override;
-	void setRemotePlayerPosition(Vector3 pos);
-
+	float getPlayerRotation();
+	void updateRemotePLayer(int id, Vector3 pos , float rot);
+	void removeRemotePlayer(int id);
 	Vector3 getPlayerPosition();
 };

@@ -13,12 +13,14 @@ const int screenHeight = 450;
    
 int main(void)
 {
+    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
+
     Client client;
     client.Connect("127.0.0.1", 8000);
 
     WorldScene scene;
 
-    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
+    
 
     SetTargetFPS(60);     
 
@@ -35,16 +37,29 @@ int main(void)
         
         Vector3 pos = scene.getPlayerPosition();
 
-        PlayerPacket packet;
-        PlayerPacket remotePacket;
+        PlayerPacket packet{};
+        PlayerPacket remotePacket{};
+       
+
         if (client.recievePacket(remotePacket))
         {
-            scene.setRemotePlayerPosition({ remotePacket.x,remotePacket.y , remotePacket.z });
+            if (remotePacket.disconnected)
+            {
+                scene.removeRemotePlayer(remotePacket.playerId);
+            }
+            else
+            {
+                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation);
+            }
+           
         }
+        packet.disconnected = false;
+
+        
         packet.x = pos.x;
         packet.y = pos.y;
         packet.z = pos.z;
-
+        packet.rotation = scene.getPlayerRotation();
         client.sendRequest(packet);
         
        

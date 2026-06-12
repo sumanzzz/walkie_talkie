@@ -5,6 +5,7 @@
 #include "packet.h"
 #include <iostream>
 #include <thread>
+#include <algorithm>
 
 
 #pragma comment(lib , "Ws2_32.lib")
@@ -12,6 +13,7 @@
 Server::Server()
 {
 	listenSocket = INVALID_SOCKET;
+	nextPlyerId = 1;
 	
 }
 bool Server::start(int port)
@@ -68,9 +70,13 @@ void Server::acceptClient()
 			std::cout << "Accept Failed...." << std::endl;
 			return;
 		}
+
 		clients.push_back(clientSocket);
-		
+		int assignedId = nextPlyerId++;
+		playerIds[clientSocket] = assignedId;
+
 		std::cout << "Client connected !" << std::endl;
+		std::cout << "Assigned Player ID : " << assignedId << std::endl;
 		std::cout << "Client count : " << clients.size() << std::endl;
 
 		std::thread(&Server::handleClient, this, clientSocket).detach();
@@ -85,10 +91,29 @@ void Server::handleClient(SOCKET clientSocket)
 	while (true)
 	{
 		int bytesread = recv(clientSocket, (char*)&packet, sizeof(packet), 0);
+		if (bytesread == -1)
+		{
+			std::cout << "Client disconnected.." << std::endl;
+			PlayerPacket disconnectedPacket{};
 
+			disconnectedPacket.disconnected = true;
+
+			disconnectedPacket.playerId = playerIds[clientSocket];
+
+			for (SOCKET other : clients)
+			{
+				if (other != clientSocket)
+				{
+					send(other, (char*)&disconnectedPacket, sizeof(disconnectedPacket), 0);
+				}
+			}
+			break;
+		}
 		if (bytesread > 0)
 		{
-			std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
+			packet.playerId = playerIds[clientSocket];
+
+			//std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
 
 			for (SOCKET other : clients)
 			{
@@ -99,5 +124,8 @@ void Server::handleClient(SOCKET clientSocket)
 			}
 		}
 	}
+	closesocket(clientSocket);
+	clients.erase(std::remove(clients.begin(), clients.end(), clientSocket), clients.end());
+	playerIds.erase(clientSocket);
 	
 }

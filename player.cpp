@@ -3,7 +3,10 @@
 
 Player::Player()
 {
+	
+	
 	position = { 0 , 1 , 0 };
+	rotation = 0.0f;
 }
 
 void Player::update(float dt , float cameraAngle)
@@ -46,12 +49,16 @@ void Player::update(float dt , float cameraAngle)
 	}
 }
 
-void Player::draw()
-{
-	DrawCube(position, 1, 1, 1, BLUE);
-}
-
 Vector3 Player::getPosition() const
 {
 	return position;
+}
+
+float Player::getrotation() const
+{
+	return rotation;
+}
+void Player::setRotation(float rot)
+{
+	rotation = rot;
 }
