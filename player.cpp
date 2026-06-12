@@ -27,22 +27,22 @@ void Player::update(float dt , float cameraAngle)
 		-forward.x
 	};
 
-	if (IsKeyPressed(KEY_W))
+	if (IsKeyDown(KEY_W))
 	{
 		position.x -= forward.x * speed * dt;
 		position.z -= forward.z * speed * dt;
 	}
-	if (IsKeyPressed(KEY_S))
+	if (IsKeyDown(KEY_S))
 	{
 		position.x += forward.x * speed * dt;
 		position.z += forward.z * speed * dt;
 	}
-	if (IsKeyPressed(KEY_A))
+	if (IsKeyDown(KEY_A))
 	{
 		position.x -= right.x * speed * dt;
 		position.z -= right.z * speed * dt;
 	}
-	if (IsKeyPressed(KEY_D))
+	if (IsKeyDown(KEY_D))
 	{
 		position.x += right.x * speed * dt;
 		position.z += right.z * speed * dt;

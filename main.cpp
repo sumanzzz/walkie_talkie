@@ -53,7 +53,7 @@ int main(void)
             }
             else
             {
-                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation);
+                scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation , remotePacket.username);
             }
            
         }
