@@ -47,6 +47,11 @@ int main(void)
         strcpy(packet.username, username.c_str());
         if (client.recievePacket(remotePacket))
         {
+            if (remotePacket.isChat)
+            {
+                std::cout << "chat : " << remotePacket.message << std::endl;
+                scene.updateRemotePlayerChat(remotePacket.playerId, remotePacket.message);
+            }
             if (remotePacket.disconnected)
             {
                 scene.removeRemotePlayer(remotePacket.playerId);

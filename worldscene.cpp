@@ -36,6 +36,13 @@ void WorldScene::update(float dt)
         playerPos.y + 1.0f,
         playerPos.z
     };
+    for (auto& player : remotePlayers)
+    {
+        if (player.second.messageTimer > 0)
+        {
+            player.second.messageTimer -= dt;
+        }
+    }
 }
 Vector3 WorldScene::getPlayerPosition()
 {
@@ -50,6 +57,12 @@ void WorldScene::updateRemotePLayer(int id, Vector3 pos , float rot ,std::string
     remotePlayers[id].position = pos;
     remotePlayers[id].rotation = rot;
     remotePlayers[id].username = username;
+    
+}
+void WorldScene::updateRemotePlayerChat(int id, std::string message)
+{
+    remotePlayers[id].currentMessage = message;
+    remotePlayers[id].messageTimer = 5.0f;
 }
 void WorldScene::removeRemotePlayer(int id)
 {
@@ -73,10 +86,9 @@ void WorldScene::draw()
         Vector3 remotePlayerPos = player.second.position;
         remotePlayerPos.y -= 0.6f;
         DrawModelEx(bunny, remotePlayerPos, {0,1,0},player.second.rotation * RAD2DEG + 90.0f,{1,1,1}, PINK);
-
-        
         
     }
+   
     
     DrawGrid(50, 1.0f);
 
@@ -90,6 +102,18 @@ void WorldScene::draw()
 
         Vector2 screenPos = GetWorldToScreen(textPos, camera);
         DrawText(player.second.username.c_str(), (int)screenPos.x, (int)screenPos.y, 20, ORANGE);
+    }
+    for (auto& player : remotePlayers)
+    {
+        if (player.second.messageTimer > 0)
+        {
+            Vector3 textPos = player.second.position;
+            textPos.y += 2.0f;
+
+            Vector2 screenPos = GetWorldToScreen(textPos, camera);
+            DrawText(player.second.currentMessage.c_str(), (int)screenPos.x, (int)screenPos.y, 20, DARKBLUE);
+        }
+        
     }
 }
 
