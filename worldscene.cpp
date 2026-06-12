@@ -127,8 +127,17 @@ void WorldScene::draw()
             int bubbleX = (int)screenPos.x + 40;
             int bubbleY = (int)screenPos.y + 40;
 
-            DrawRectangleRounded({ (float)bubbleX , (float)bubbleY ,120.0f , 35.0f }, 0.3f, 8, WHITE);
-            DrawRectangleRoundedLines({ (float)bubbleX , (float)bubbleY ,120.0f , 35.0f }, 0.3f, 8, BLACK);
+            int width = MeasureText(player.second.currentMessage.c_str(), 18) + 20;
+            int height = 35;
+            DrawRectangleRounded({ (float)bubbleX , (float)bubbleY ,(float)width , (float)height }, 0.3f, 8, WHITE);
+            DrawRectangleRoundedLines({ (float)bubbleX , (float)bubbleY ,(float)width , (float)height }, 0.3f, 8, BLACK);
+            Vector2 p1 = {(float)bubbleX, (float)bubbleY + 20};
+
+            Vector2 p2 = {(float)bubbleX - 10,(float)bubbleY + 30};
+
+            Vector2 p3 = {(float)bubbleX,(float)bubbleY + 30};
+
+            DrawTriangle(p1,p2,p3,WHITE);
             DrawText(player.second.currentMessage.c_str(), bubbleX + 10, bubbleY + 8, 18, DARKBLUE);
 
         }
