@@ -55,7 +55,7 @@ Each client sends its player state to the server. The server receives this infor
 
 ### Architecture Diagram
 
-*Insert Network Architecture Diagram Here*
+![Netork Architecture](network.png)
 
 ### Server Responsibilities
 
