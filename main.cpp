@@ -14,10 +14,12 @@ const int screenHeight = 450;
    
 int main(void)
 {
-    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
-
+    
     std::string username;
+    std::cout << "Enter username : ";
     std::getline(std::cin, username);
+
+    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
 
     Client client;
     client.Connect("127.0.0.1", 8000);
@@ -92,8 +94,13 @@ int main(void)
 
             while (key > 0)
             {
-                currentInput += (char)key;
-                key = GetCharPressed();
+                if (currentInput.size() < 127)
+                {
+                    currentInput += (char)key;
+                    
+                }
+                key = GetCharPressed(); 
+                
             }
 
             if (isTyping && IsKeyPressed(KEY_BACKSPACE) && !currentInput.empty())
@@ -106,9 +113,14 @@ int main(void)
                 chatPacket.isChat = true;
 
                 strcpy_s(chatPacket.message, currentInput.c_str());
+                
+                if (!currentInput.empty())
+                {
+                    client.sendRequest(chatPacket);
+                }
+                
                 currentInput.clear();
                 isTyping = false;
-                client.sendRequest(chatPacket);
             }
         }
 

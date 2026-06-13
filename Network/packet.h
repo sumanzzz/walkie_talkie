@@ -11,6 +11,6 @@ struct PlayerPacket
 	char username[32];
 
 	bool isChat;
-	char message[32];
+	char message[128];
 };
 
