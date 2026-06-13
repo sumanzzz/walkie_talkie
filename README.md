@@ -89,7 +89,7 @@ Blender Model -> GLB Export -> Raylib Model Loading -> Networked Multiplayer Cha
 
 ### Bunny Model
 
-![Netork Architecture](./images/character.png)
+![Character](./images/character.png)
 
 ---
 
@@ -129,7 +129,7 @@ Each player's most recent message appears inside a temporary chat bubble positio
 
 ### Chat System Diagram
 
-![Netork Architecture](./images/chat.png)
+![Chat](./images/chat.png)
 
 ### Chat Behaviour
 
@@ -179,7 +179,13 @@ The final result is a fully functional multiplayer prototype where multiple play
 
 ### Gameplay Screenshot
 
-*Insert In-Game Screenshot Here*
+![Server](./images/server.png)
+![Client](./images/client.png)
+![Output](./images/final1.png)
+![Output](./images/final2.png)
+![Output](./images/final3.png)
+![Output](./images/final4.png)
+![Output](./images/final5.png)
 
 ---
 
