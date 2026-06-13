@@ -95,7 +95,7 @@ Networked Multiplayer Character
 
 ### Bunny Model
 
-*Insert Blender Bunny Screenshot Here*
+![Netork Architecture](./images/character.png)
 
 ---
 
