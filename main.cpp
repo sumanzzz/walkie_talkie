@@ -14,10 +14,12 @@ const int screenHeight = 450;
    
 int main(void)
 {
-    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
-
+    
     std::string username;
+    std::cout << "Enter username : ";
     std::getline(std::cin, username);
+
+    InitWindow(screenWidth, screenHeight, "Walkie Talkie");
 
     Client client;
     client.Connect("127.0.0.1", 8000);
@@ -30,6 +32,8 @@ int main(void)
 
     DisableCursor();
 
+    std::string currentInput;
+    bool isTyping = false;
     
 
     while (!WindowShouldClose())    
@@ -43,16 +47,22 @@ int main(void)
 
         PlayerPacket packet{};
         PlayerPacket remotePacket{};
-       
+        
         strcpy(packet.username, username.c_str());
         if (client.recievePacket(remotePacket))
         {
+            if (remotePacket.isChat)
+            {
+                std::cout << "chat : " << remotePacket.message << std::endl;
+                scene.updateRemotePlayerChat(remotePacket.playerId, remotePacket.message);
+            }
             if (remotePacket.disconnected)
             {
                 scene.removeRemotePlayer(remotePacket.playerId);
             }
             else
             {
+         
                 scene.updateRemotePLayer(remotePacket.playerId, { remotePacket.x,remotePacket.y , remotePacket.z } , remotePacket.rotation , remotePacket.username);
             }
            
@@ -64,8 +74,56 @@ int main(void)
         packet.y = pos.y;
         packet.z = pos.z;
         packet.rotation = scene.getPlayerRotation();
+        packet.isChat = false;
         client.sendRequest(packet);
         
+       
+        scene.setCurrentInput(currentInput);
+        scene.setIsTyping(isTyping);
+
+        if (!isTyping)
+        {
+            if (IsKeyPressed(KEY_ENTER))
+            {
+                isTyping = true;
+            }
+        }
+        else
+        {
+            int key = GetCharPressed();
+
+            while (key > 0)
+            {
+                if (currentInput.size() < 127)
+                {
+                    currentInput += (char)key;
+                    
+                }
+                key = GetCharPressed(); 
+                
+            }
+
+            if (isTyping && IsKeyPressed(KEY_BACKSPACE) && !currentInput.empty())
+            {
+                currentInput.pop_back();
+            }
+            if (isTyping && IsKeyPressed(KEY_ENTER))
+            {
+                PlayerPacket chatPacket{};
+                chatPacket.isChat = true;
+
+                strcpy_s(chatPacket.message, currentInput.c_str());
+                
+                if (!currentInput.empty())
+                {
+                    client.sendRequest(chatPacket);
+                }
+                
+                currentInput.clear();
+                isTyping = false;
+            }
+        }
+
        
         BeginDrawing();
 

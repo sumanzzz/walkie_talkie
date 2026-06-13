@@ -4,7 +4,7 @@
 
 WorldScene::WorldScene()
 {
-    bunny = LoadModel("assets/bunny3.glb");
+    bunny = LoadModel("assets/bunny7.glb");
     camera.position = { 0.0f, 10.0f, 10.0f };
     camera.target = { 0.0f, 0.0f, 0.0f };
     camera.up = { 0.0f, 1.0f, 0.0f };
@@ -16,7 +16,11 @@ WorldScene::WorldScene()
 
 void WorldScene::update(float dt)
 {
-    player.update(dt , cameraAngle);
+    if (!isTyping)
+    {
+        player.update(dt, cameraAngle);
+    }
+    
     cameraAngle -= GetMouseDelta().x * 0.005f;
     player.setRotation(cameraAngle);
     Vector3 playerPos = player.getPosition();
@@ -36,6 +40,13 @@ void WorldScene::update(float dt)
         playerPos.y + 1.0f,
         playerPos.z
     };
+    for (auto& player : remotePlayers)
+    {
+        if (player.second.messageTimer > 0)
+        {
+            player.second.messageTimer -= dt;
+        }
+    }
 }
 Vector3 WorldScene::getPlayerPosition()
 {
@@ -50,12 +61,25 @@ void WorldScene::updateRemotePLayer(int id, Vector3 pos , float rot ,std::string
     remotePlayers[id].position = pos;
     remotePlayers[id].rotation = rot;
     remotePlayers[id].username = username;
+    
+}
+void WorldScene::updateRemotePlayerChat(int id, std::string message)
+{
+    remotePlayers[id].currentMessage = message;
+    remotePlayers[id].messageTimer = 5.0f;
 }
 void WorldScene::removeRemotePlayer(int id)
 {
     remotePlayers.erase(id);
 }
-
+void WorldScene::setCurrentInput(const std::string& input)
+{
+    currentInput = input;
+}
+void WorldScene::setIsTyping(bool state)
+{
+    isTyping = state;
+}
 
 void WorldScene::draw()
 {
@@ -73,10 +97,9 @@ void WorldScene::draw()
         Vector3 remotePlayerPos = player.second.position;
         remotePlayerPos.y -= 0.6f;
         DrawModelEx(bunny, remotePlayerPos, {0,1,0},player.second.rotation * RAD2DEG + 90.0f,{1,1,1}, PINK);
-
-        
         
     }
+   
     
     DrawGrid(50, 1.0f);
 
@@ -90,6 +113,40 @@ void WorldScene::draw()
 
         Vector2 screenPos = GetWorldToScreen(textPos, camera);
         DrawText(player.second.username.c_str(), (int)screenPos.x, (int)screenPos.y, 20, ORANGE);
+    }
+    for (auto& player : remotePlayers)
+    {
+        if (player.second.messageTimer > 0)
+        {
+            Vector3 textPos = player.second.position;
+            textPos.y += 2.0f;
+
+            Vector2 screenPos = GetWorldToScreen(textPos, camera);
+            //DrawText(player.second.currentMessage.c_str(), (int)screenPos.x, (int)screenPos.y, 20, DARKBLUE);
+
+            int bubbleX = (int)screenPos.x + 40;
+            int bubbleY = (int)screenPos.y + 40;
+
+            int width = MeasureText(player.second.currentMessage.c_str(), 18) + 20;
+            int height = 35;
+            DrawRectangleRounded({ (float)bubbleX , (float)bubbleY ,(float)width , (float)height }, 0.3f, 8, WHITE);
+            DrawRectangleRoundedLines({ (float)bubbleX , (float)bubbleY ,(float)width , (float)height }, 0.3f, 8, BLACK);
+            Vector2 p1 = {(float)bubbleX, (float)bubbleY + 20};
+
+            Vector2 p2 = {(float)bubbleX - 10,(float)bubbleY + 30};
+
+            Vector2 p3 = {(float)bubbleX,(float)bubbleY + 30};
+
+            DrawTriangle(p1,p2,p3,WHITE);
+            DrawText(player.second.currentMessage.c_str(), bubbleX + 10, bubbleY + 8, 18, DARKBLUE);
+
+        }
+        
+    }
+    if (isTyping)
+    {
+        DrawRectangle(20, GetScreenHeight() - 50, 400, 30, LIGHTGRAY);
+        DrawText(currentInput.c_str(), 25, GetScreenHeight() - 45, 20, BLACK);
     }
 }
 

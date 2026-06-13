@@ -91,43 +91,68 @@ void Server::handleClient(SOCKET clientSocket)
 	while (true)
 	{
 		int bytesread = recv(clientSocket, (char*)&packet, sizeof(packet), 0);
-		if (bytesread == -1)
-		{
-			std::cout <<usernames[packet.playerId] <<" " << " disconnected.." << std::endl;
-			PlayerPacket disconnectedPacket{};
-
-			disconnectedPacket.disconnected = true;
-
-			disconnectedPacket.playerId = playerIds[clientSocket];
-
-			for (SOCKET other : clients)
+		
+		
+		
+			if (bytesread == -1)
 			{
-				if (other != clientSocket)
+				int playerId = playerIds[clientSocket];
+
+				std::cout<< usernames[playerId]<< " disconnected..."<< std::endl;
+				PlayerPacket disconnectedPacket{};
+
+				disconnectedPacket.disconnected = true;
+
+				disconnectedPacket.playerId = playerIds[clientSocket];
+
+				for (SOCKET other : clients)
 				{
-					send(other, (char*)&disconnectedPacket, sizeof(disconnectedPacket), 0);
+					if (other != clientSocket)
+					{
+						send(other, (char*)&disconnectedPacket, sizeof(disconnectedPacket), 0);
+					}
 				}
+				break;
 			}
-			break;
-		}
-		if (bytesread > 0)
-		{
-			packet.playerId = playerIds[clientSocket];
-			if (usernames.find(packet.playerId) == usernames.end())
+			if (bytesread > 0)
 			{
-				usernames[packet.playerId] = packet.username;
-
-				std::cout << "Player : " <<packet.playerId << " joined as " <<" "<< usernames[packet.playerId] << std::endl;
-			}
-			//std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
-
-			for (SOCKET other : clients)
-			{
-				if (other != INVALID_SOCKET && other != clientSocket)
+				if (packet.isChat)
 				{
-					send(other, (char*)&packet, sizeof(packet), 0);
+					std::cout << "Message Recieved : " << packet.message << std::endl;
+					packet.playerId = playerIds[clientSocket];
+
+					for (SOCKET other : clients)
+					{
+						if (other != clientSocket && other != INVALID_SOCKET)
+						{
+							send(other, (char*)&packet, sizeof(packet), 0);
+						}
+					}
+
 				}
+				else
+				{
+					packet.playerId = playerIds[clientSocket];
+					if (usernames.find(packet.playerId) == usernames.end())
+					{
+						usernames[packet.playerId] = packet.username;
+
+						std::cout << "Player : " << packet.playerId << " joined as " << " " << usernames[packet.playerId] << std::endl;
+					}
+					//std::cout << "Thread : " <<std::this_thread::get_id() <<" Position : "<< packet.x << " " << packet.y << " " << packet.z << std::endl;
+
+					for (SOCKET other : clients)
+					{
+						if (other != INVALID_SOCKET && other != clientSocket)
+						{
+							send(other, (char*)&packet, sizeof(packet), 0);
+						}
+					}
+				}
+				
 			}
-		}
+		
+		
 	}
 	closesocket(clientSocket);
 	clients.erase(std::remove(clients.begin(), clients.end(), clientSocket), clients.end());

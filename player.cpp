@@ -1,6 +1,7 @@
 #include "player.h"
 #include <iostream>
 
+
 Player::Player()
 {
 	
@@ -47,6 +48,7 @@ void Player::update(float dt , float cameraAngle)
 		position.x += right.x * speed * dt;
 		position.z += right.z * speed * dt;
 	}
+	
 }
 
 Vector3 Player::getPosition() const
