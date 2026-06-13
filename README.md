@@ -85,13 +85,7 @@ The objective was to create a lightweight and easily recognizable character that
 
 ### Asset Pipeline
 
-Blender Model
-↓
-GLB Export
-↓
-Raylib Model Loading
-↓
-Networked Multiplayer Character
+Blender Model -> GLB Export -> Raylib Model Loading -> Networked Multiplayer Character
 
 ### Bunny Model
 
@@ -111,17 +105,7 @@ Remote clients receive the data and update remote player representations accordi
 
 ### Movement Synchronization Flow
 
-Client
-↓
-Movement Packet
-↓
-Server
-↓
-Broadcast
-↓
-Remote Clients
-↓
-Remote Player Update
+Client -> Movement Packet -> Server -> Broadcast -> Remote Clients -> Remote Player Update
 
 ---
 
@@ -145,7 +129,7 @@ Each player's most recent message appears inside a temporary chat bubble positio
 
 ### Chat System Diagram
 
-*Insert Chat Mechanic Blueprint Here*
+![Netork Architecture](./images/chat.png)
 
 ### Chat Behaviour
 
